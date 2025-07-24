@@ -2,7 +2,7 @@
 
 # asdf-superdb [![Build](https://github.com/chrismo/asdf-superdb/actions/workflows/build.yml/badge.svg)](https://github.com/chrismo/asdf-superdb/actions/workflows/build.yml) [![Lint](https://github.com/chrismo/asdf-superdb/actions/workflows/lint.yml/badge.svg)](https://github.com/chrismo/asdf-superdb/actions/workflows/lint.yml)
 
-[superdb](https://superdb.org/) plugin for the [asdf version manager](https://asdf-vm.com).
+[SuperDB](https://superdb.org/) plugin for the [asdf version manager](https://asdf-vm.com).
 
 </div>
 
