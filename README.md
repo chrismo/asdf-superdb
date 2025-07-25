@@ -18,11 +18,14 @@
 **TODO: adapt this section**
 
 - `bash`, `curl`, `tar`, and [POSIX utilities](https://pubs.opengroup.org/onlinepubs/9699919799/idx/utilities.html).
+- `go` (for building from source). See [Go asdf plugin](https://github.com/asdf-community/asdf-golang?tab=readme-ov-file#install).
 - `SOME_ENV_VAR`: set this environment variable in your shell config to load the correct version of tool x.
 
 # Install
 
 Plugin:
+
+**TODO: the first one won't work straight off will it?**
 
 ```shell
 asdf plugin add superdb
