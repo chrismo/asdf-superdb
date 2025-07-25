@@ -32,16 +32,18 @@ list_github_tags() {
 
 list_all_versions() {
 	# Read versions from versions.txt file (first column only)
+	# shellcheck disable=SC2154
 	awk '{print $1}' "${plugin_dir}/scripts/versions.txt"
 }
 
 lookup_version_sha() {
 	local version="$1"
+	# shellcheck disable=SC2154
 	awk -v ver="$version" '$1 == ver {print $2}' "${plugin_dir}/scripts/versions.txt"
 }
 
 download_release() {
-	local -r version="$1"
+	echo "TODO"
 }
 
 install_version() {
@@ -77,7 +79,6 @@ install_version() {
 			cp -v -r "$GOPATH/bin/super" "$install_path"
 		fi
 
-		# TODO: Assert superdb executable exists.
 		local tool_cmd
 		tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
 		test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."
