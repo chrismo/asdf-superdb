@@ -63,8 +63,8 @@ install_version() {
 			cp -v -r "$GOBIN/super" "$install_path"
 		fi
 
-		if [ ! -x "${GOPATH:-}/go/super" ]; then
-			cp -v -r "$GOPATH/go/super" "$install_path"
+		if [ ! -x "${GOPATH:-}/bin/super" ]; then
+			cp -v -r "$GOPATH/bin/super" "$install_path"
 		fi
 
 		# TODO: Assert superdb executable exists.
