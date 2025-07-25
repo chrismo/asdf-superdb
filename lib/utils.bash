@@ -54,7 +54,10 @@ download_release() {
 	url="$RELEASE_GH_REPO/releases/download/${version}/super-${version}-${os}-${arch}"
 
 	echo "* Downloading $TOOL_NAME release $version..."
-	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
+	if ! curl "${curl_opts[@]}" -o "$filename" -C - "$url"; then
+		echo "Failed to download $TOOL_NAME $version from $url"
+		return 0 # we don't want to stop things, we want to fall through to build
+	fi
 }
 
 verify_installation() {
@@ -74,17 +77,16 @@ install_downloaded() {
 	local install_path="$2"
 
 	local downloaded_binary="${ASDF_DOWNLOAD_PATH:-}/$TOOL_NAME-$version"
-	if [ -n "${ASDF_DOWNLOAD_PATH:-}" ] && [ -f "$downloaded_binary" ] && [ -x "$downloaded_binary" ]; then
+	if [[ -f "$downloaded_binary" ]] && [[ -x "$downloaded_binary" ]]; then
 		echo "* Using downloaded $TOOL_NAME $version binary..."
 
 		mkdir -p "$install_path"
-		cp -v "$downloaded_binary" "$install_path/super"
-		chmod +x "$install_path/super"
+		mv -v "$downloaded_binary" "$install_path/super"
 
-		verify_installation "$install_path" "$version"
+		verify_installation "$install_path" "$version" || return 1
+	else
+		return 1
 	fi
-
-	return 1
 }
 
 build_from_sources() {
@@ -105,7 +107,9 @@ build_from_sources() {
 	(
 		echo "* Building $TOOL_NAME $version from github.com/brimdata/super ..."
 
-		go install github.com/brimdata/super/cmd/super@"$install_ref"
+		if ! go install github.com/brimdata/super/cmd/super@"$install_ref"; then
+			fail "Failed to build $TOOL_NAME $version from source."
+		fi
 
 		mkdir -p "$install_path"
 
@@ -118,7 +122,7 @@ build_from_sources() {
 			cp -v -r "$GOPATH/bin/super" "$install_path"
 		fi
 
-		verify_installation "$install_path" "$version"
+		verify_installation "$install_path" "$version" || fail "$TOOL_NAME $version build failed verification."
 	) || (
 		rm -rf "$install_path"
 		fail "An error occurred while installing $TOOL_NAME $version."
@@ -137,5 +141,4 @@ install_version() {
 		# Fall back to building from source
 		build_from_sources "$install_type" "$version" "$install_path"
 	fi
-
 }

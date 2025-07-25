@@ -8,10 +8,17 @@ plugin_dir=$(dirname "$(dirname "$current_script_path")")
 # shellcheck source=../lib/utils.bash
 source "${plugin_dir}/lib/utils.bash"
 
-mkdir -p "$ASDF_DOWNLOAD_PATH"
+# ref type is build-only
+if [ "$ASDF_INSTALL_TYPE" == "version" ]; then
+	mkdir -p "$ASDF_DOWNLOAD_PATH"
 
-# file is a standalone binary, not an archive
-release_file="$ASDF_DOWNLOAD_PATH/$TOOL_NAME-$ASDF_INSTALL_VERSION"
+	# file is a standalone binary, not an archive
+	release_file="$ASDF_DOWNLOAD_PATH/$TOOL_NAME-$ASDF_INSTALL_VERSION"
 
-# Download the binary to the download directory, if one exists
-download_release "$ASDF_INSTALL_VERSION" "$release_file"
+	# Download the binary to the download directory, if one exists
+	download_release "$ASDF_INSTALL_VERSION" "$release_file"
+
+	if [[ -f "$release_file" ]]; then
+		chmod +x "$release_file"
+	fi
+fi
