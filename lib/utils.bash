@@ -63,7 +63,7 @@ install_version() {
 			cp -v -r "$GOBIN/super" "$install_path"
 		fi
 
-		if [ ! -x "${GOPATH:-}/bin/super" ]; then
+		if [ -x "${GOPATH:-}/bin/super" ]; then
 			cp -v -r "$GOPATH/bin/super" "$install_path"
 		fi
 
