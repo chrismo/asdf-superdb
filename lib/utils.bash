@@ -46,7 +46,7 @@ install_version() {
 	local install_path="${3%/bin}/bin"
 
 	if [ "$install_type" == "version" ]; then
-		fail "asdf-$TOOL_NAME supports source build installs (ref) only"
+		fail "ref installs only. e.g., asdf install superdb ref:(branch|tag|commit)"
 	fi
 
 	(
