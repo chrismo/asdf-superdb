@@ -25,11 +25,10 @@
 
 Plugin:
 
-**TODO: the first one won't work straight off will it?**
+This plugin is new and not stable, so it is not registered with
+https://github.com/asdf-vm/asdf-plugins yet.
 
 ```shell
-asdf plugin add superdb
-# or
 asdf plugin add superdb https://github.com/chrismo/asdf-superdb.git
 ```
 
@@ -37,13 +36,13 @@ superdb:
 
 ```shell
 # Show all installable versions
-asdf list-all superdb
+asdf list all superdb
 
 # Install specific version
 asdf install superdb latest
 
 # Set a version globally (on your ~/.tool-versions file)
-asdf global superdb latest
+asdf set --home superdb latest
 
 # Now superdb commands are available
 super --version
