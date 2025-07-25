@@ -16,11 +16,11 @@
 
 # About
 
-SuperDB is currently in pre-release and has no official tags or versioned
-releases. Since it is introducing breaking changes from its predecessor
-[zq](https://zed.brimdata.io/docs/commands/zq) as development proceeds, early
-adopters may want to manage installed versions, and this plugin allows that to
-happen.
+[SuperDB](https://superdb.org/) is currently in pre-release and has no official
+tags or versioned releases. Since it is introducing breaking changes from its
+predecessor [zq](https://zed.brimdata.io/docs/commands/zq) as development
+proceeds, early adopters may want to manage installed versions, and this plugin
+allows that to happen.
 
 Pseudo-versions are defined in this plugin by assigning a timestamped version to
 the latest sha on the listed date. The timestamp is: `(last digit of the
@@ -39,8 +39,7 @@ roughly once a month.
 `super` binaries are built using `go install` direct from the
 [repository](https://github.com/brimdata/super). This plugin expects the
 resulting binary to be in `$GOBIN` or `$GOPATH/bin` which should be established
-if you're using a recent version of Go, but if you run into problems, let us
-know.
+if you're using a recent version of Go. If you run into problems let us know.
 
 # Dependencies
 
@@ -77,11 +76,11 @@ super --version
 ```
 
 Check [asdf](https://github.com/asdf-vm/asdf) readme for more instructions on how to
-install & manage versions.
+install and manage versions.
 
 # Contributing
 
-Contributions of any kind welcome! See the [contributing guide](contributing.md).
+Contributions of any kind are welcome! See the [contributing guide](contributing.md).
 
 [Thanks goes to these contributors](https://github.com/chrismo/asdf-superdb/graphs/contributors)!
 
