@@ -37,15 +37,16 @@ list_all_versions() {
 }
 
 download_release() {
-	local version filename url
-	version="$1"
-	filename="$2"
+	local -r version="$1"
 
-	# TODO: Adapt the release URL convention for superdb
-	url="$GH_REPO/archive/v${version}.tar.gz"
+	echo "* Downloading and building $TOOL_NAME release $version..."
 
-	echo "* Downloading $TOOL_NAME release $version..."
-	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
+  pushd "$ASDF_DOWNLOAD_PATH"
+
+	go install github.com/brimdata/super/cmd/super@"$version"
+	# TODO: remove the sources, leave the binary.
+
+  popd
 }
 
 install_version() {
@@ -53,13 +54,13 @@ install_version() {
 	local version="$2"
 	local install_path="${3%/bin}/bin"
 
-	if [ "$install_type" != "version" ]; then
-		fail "asdf-$TOOL_NAME supports release installs only"
+	if [ "$install_type" == "version" ]; then
+		fail "asdf-$TOOL_NAME supports source build installs (ref) only"
 	fi
 
 	(
 		mkdir -p "$install_path"
-		cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
+		cp -v -r "$ASDF_DOWNLOAD_PATH"/go/bin/super "$install_path"
 
 		# TODO: Assert superdb executable exists.
 		local tool_cmd
