@@ -8,18 +8,44 @@
 
 # Contents
 
+- [About](#about)
 - [Dependencies](#dependencies)
 - [Install](#install)
 - [Contributing](#contributing)
 - [License](#license)
 
-# Dependencies
+# About
 
-**TODO: adapt this section**
+SuperDB is currently in pre-release and has no official tags or versioned
+releases. Since it is introducing breaking changes from its predecessor
+[zq](https://zed.brimdata.io/docs/commands/zq) as development proceeds, early
+adopters may want to manage installed versions, and this plugin allows that to
+happen.
+
+Pseudo-versions are defined in this plugin by assigning a timestamped version to
+the latest sha on the listed date. The timestamp is: `(last digit of the
+year)(mm)(dd)`.
+
+```text
+  Version  Sha
+  -------  ---
+  0.50529  c8cc05e6
+  0.50630  f86de86d
+```
+
+The full list is here: [versions.txt](scripts/versions.txt) and will be updated
+roughly once a month.
+
+`super` binaries are built using `go install` direct from the
+[repository](https://github.com/brimdata/super). This plugin expects the
+resulting binary to be in `$GOBIN` or `$GOPATH/bin` which should be established
+if you're using a recent version of Go, but if you run into problems, let us
+know.
+
+# Dependencies
 
 - `bash`, `curl`, `tar`, and [POSIX utilities](https://pubs.opengroup.org/onlinepubs/9699919799/idx/utilities.html).
 - `go` (for building from source). See [Go asdf plugin](https://github.com/asdf-community/asdf-golang?tab=readme-ov-file#install).
-- `SOME_ENV_VAR`: set this environment variable in your shell config to load the correct version of tool x.
 
 # Install
 
@@ -35,6 +61,8 @@ asdf plugin add superdb https://github.com/chrismo/asdf-superdb.git
 superdb:
 
 ```shell
+# asdf version 0.16.0 or later
+
 # Show all installable versions
 asdf list all superdb
 
