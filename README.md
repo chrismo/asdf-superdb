@@ -34,7 +34,16 @@ year)(mm)(dd)`.
 ```
 
 The full list is here: [versions.txt](scripts/versions.txt) and will be updated
-roughly once a month.
+roughly once a month. If there's a specific version you'd like included, please
+submit a PR.
+
+`asdf` always allows you to install by ref as well:
+
+```shell
+asdf install superdb ref:aabbccdd00
+# or
+asdf install superdb ref:(branch|tag|sha)
+```
 
 `super` binaries are built using `go install` direct from the
 [repository](https://github.com/brimdata/super). This plugin expects the
