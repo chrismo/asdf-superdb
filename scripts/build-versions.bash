@@ -33,7 +33,7 @@ done
 echo "Post-processing to keep only last entry of each month..."
 
 # Process to keep only last entry of each month
-sed 's/^0\.\(.\)\(..\).* \(.*\)/\1\2 &/' "$output_path" | sort -k1,1 -r | sort -k1,1 -u | cut -d' ' -f2- > "${output_path}.tmp"
+sed 's/^0\.\(.\)\(..\).* \(.*\)/\1\2 &/' "$output_path" | sort -k1,1 -r | sort -k1,1 -u | cut -d' ' -f2- >"${output_path}.tmp"
 
 mv "${output_path}.tmp" "$output_path"
 
