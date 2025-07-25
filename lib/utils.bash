@@ -4,6 +4,7 @@ set -euo pipefail
 
 # TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for superdb.
 GH_REPO="https://github.com/brimdata/super"
+RELEASE_GH_REPO="https://github.com/chrismo/superdb-builds"
 TOOL_NAME="superdb"
 TOOL_TEST="super --version"
 
@@ -43,13 +44,53 @@ lookup_version_sha() {
 }
 
 download_release() {
-	echo "TODO"
+	local version filename url
+	version="$1"
+	filename="$2"
+
+	local -r arch=$(uname -m | tr "[:upper:]" "[:lower:]")
+	local -r os=$(uname | tr "[:upper:]" "[:lower:]")
+
+	url="$RELEASE_GH_REPO/releases/download/${version}/super-${version}-${os}-${arch}"
+
+	echo "* Downloading $TOOL_NAME release $version..."
+	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 }
 
-install_version() {
+verify_installation() {
+	local install_path="$1"
+	local version="$2"
+
+	local tool_cmd
+	tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
+	test -x "$install_path/$tool_cmd" || return 1
+
+	echo "$TOOL_NAME $version installation was successful!"
+	return 0
+}
+
+install_downloaded() {
+	local version="$1"
+	local install_path="$2"
+
+	local downloaded_binary="${ASDF_DOWNLOAD_PATH:-}/$TOOL_NAME-$version"
+	if [ -n "${ASDF_DOWNLOAD_PATH:-}" ] && [ -f "$downloaded_binary" ] && [ -x "$downloaded_binary" ]; then
+		echo "* Using downloaded $TOOL_NAME $version binary..."
+
+		mkdir -p "$install_path"
+		cp -v "$downloaded_binary" "$install_path/super"
+		chmod +x "$install_path/super"
+
+		verify_installation "$install_path" "$version"
+	fi
+
+	return 1
+}
+
+build_from_sources() {
 	local install_type="$1"
 	local version="$2"
-	local install_path="${3%/bin}/bin"
+	local install_path="$3"
 
 	local install_ref
 	if [ "$install_type" == "version" ]; then
@@ -73,19 +114,28 @@ install_version() {
 
 		if [ -x "${GOBIN:-}/super" ]; then
 			cp -v -r "$GOBIN/super" "$install_path"
-		fi
-
-		if [ -x "${GOPATH:-}/bin/super" ]; then
+		elif [ -x "${GOPATH:-}/bin/super" ]; then
 			cp -v -r "$GOPATH/bin/super" "$install_path"
 		fi
 
-		local tool_cmd
-		tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
-		test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."
-
-		echo "$TOOL_NAME $version installation was successful!"
+		verify_installation "$install_path" "$version"
 	) || (
 		rm -rf "$install_path"
 		fail "An error occurred while installing $TOOL_NAME $version."
 	)
+}
+
+install_version() {
+	local install_type="$1"
+	local version="$2"
+	local install_path="${3%/bin}/bin"
+
+	# Try to install from the downloaded binary first
+	if install_downloaded "$version" "$install_path"; then
+		return 0
+	else
+		# Fall back to building from source
+		build_from_sources "$install_type" "$version" "$install_path"
+	fi
+
 }
