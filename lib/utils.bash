@@ -59,11 +59,11 @@ install_version() {
 		# TODO: consider saving the current bin/super if there is one, then
 		#  restoring it and using `mv` instead of `cp`
 
-		if [ -x "$GOBIN/super" ]; then
+		if [ -x "${GOBIN:-}/super" ]; then
 			cp -v -r "$GOBIN/super" "$install_path"
 		fi
 
-		if [ ! -x "$GOPATH/go/super" ]; then
+		if [ ! -x "${GOPATH:-}/go/super" ]; then
 			cp -v -r "$GOPATH/go/super" "$install_path"
 		fi
 
