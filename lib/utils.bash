@@ -38,15 +38,6 @@ list_all_versions() {
 
 download_release() {
 	local -r version="$1"
-
-	echo "* Downloading and building $TOOL_NAME release $version..."
-
-  pushd "$ASDF_DOWNLOAD_PATH"
-
-	go install github.com/brimdata/super/cmd/super@"$version"
-	# TODO: remove the sources, leave the binary.
-
-  popd
 }
 
 install_version() {
@@ -59,8 +50,22 @@ install_version() {
 	fi
 
 	(
+		echo "* Building $TOOL_NAME $version from github.com/brimdata/super ..."
+
+		go install github.com/brimdata/super/cmd/super@"$version"
+
 		mkdir -p "$install_path"
-		cp -v -r "$ASDF_DOWNLOAD_PATH"/go/bin/super "$install_path"
+
+		# TODO: consider saving the current bin/super if there is one, then
+		#  restoring it and using `mv` instead of `cp`
+
+		if [ -x "$GOBIN/super" ]; then
+			cp -v -r "$GOBIN/super" "$install_path"
+		fi
+
+		if [ ! -x "$GOPATH/go/super" ]; then
+			cp -v -r "$GOPATH/go/super" "$install_path"
+		fi
 
 		# TODO: Assert superdb executable exists.
 		local tool_cmd
