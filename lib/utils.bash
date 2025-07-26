@@ -51,6 +51,10 @@ download_release() {
 	local -r arch=$(uname -m | tr "[:upper:]" "[:lower:]")
 	local -r os=$(uname | tr "[:upper:]" "[:lower:]")
 
+	case $arch in
+	aarch64 | arm64) arch="arm64" ;;
+	esac
+
 	url="$RELEASE_GH_REPO/releases/download/${version}/super-${version}-${os}-${arch}"
 
 	echo "* Downloading $TOOL_NAME release $version..."
