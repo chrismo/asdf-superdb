@@ -48,9 +48,10 @@ download_release() {
 	version="$1"
 	filename="$2"
 
-	local -r arch=$(uname -m | tr "[:upper:]" "[:lower:]")
 	local -r os=$(uname | tr "[:upper:]" "[:lower:]")
 
+	local arch
+	arch=$(uname -m | tr "[:upper:]" "[:lower:]")
 	case $arch in
 	aarch64 | arm64) arch="arm64" ;;
 	esac
