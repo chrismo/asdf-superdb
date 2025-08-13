@@ -125,6 +125,8 @@ build_from_sources() {
 			cp -v -r "$GOBIN/super" "$install_path"
 		elif [ -x "${GOPATH:-}/bin/super" ]; then
 			cp -v -r "$GOPATH/bin/super" "$install_path"
+		else
+			echo "Couldn't find GOBIN or GOPATH. Dunno how to locate build output."
 		fi
 
 		verify_installation "$install_path" "$version" || fail "$TOOL_NAME $version build failed verification."
