@@ -8,5 +8,21 @@
 0.50429 7bf0cb2e
 0.50529 c8cc05e6
 0.50630 f86de86d
+
+# many breaking changes (over the past months):
+#   - -f text => -f line
+#   - parse_zson -> parse_sup
+#   - -z switch -> -s
+#   - yield -> values
+#   - sample -> shapes
+#   - one-based indexes
+#   - comments from // to -- and /* ... */
+#   - over -> unnest
 0.50725 e75dfdaf
 0.50731 2e173364
+
+# unnest into in lateral subquery works
+#0.50811 857796aa
+
+# breaking change: regex and globs
+#0.50815 687d649
