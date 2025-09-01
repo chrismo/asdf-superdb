@@ -1,3 +1,5 @@
+# dump only meaningful lines: grep -v '#' versions.txt | egrep '.'
+
 0.41031 f3b7a3a7
 0.41127 8901aa27
 0.41228 06f8f669
@@ -24,5 +26,16 @@
 # unnest into in lateral subquery works
 #0.50811 857796aa
 
-# breaking change: regex and globs
+# breaking change: regex/grep and globs
 #0.50815 687d649
+
+# breaking change: is and nest_dotted MUST have 1st argument, no more implied `this`
+#0.50827 5075037c
+
+# breaking changes: can no longer cast with "magic" functions like `time(time_as_string)`
+#0.50828 ec1c5eee
+# includes a CAST related bug fix
+#0.50829 4e6d4921
+
+# cool addition: > and < supported in joins. https://github.com/brimdata/super/pull/6167
+0.50829 50a3507
