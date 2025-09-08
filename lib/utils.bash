@@ -34,7 +34,9 @@ list_github_tags() {
 list_all_versions() {
 	# Read versions from versions.txt file (first column only)
 	# shellcheck disable=SC2154
-	awk '{print $1}' "${plugin_dir}/scripts/versions.txt"
+	grep -v '#' "${plugin_dir}/scripts/versions.txt" |
+		egrep '.' |
+		awk '{print $1}'
 }
 
 lookup_version_sha() {
