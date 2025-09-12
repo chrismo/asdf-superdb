@@ -18,9 +18,11 @@ if [ "$ASDF_INSTALL_TYPE" == "version" ]; then
 	release_file="$ASDF_DOWNLOAD_PATH/$TOOL_NAME-$ASDF_INSTALL_VERSION"
 
 	# Download the binary to the download directory, if one exists
-	download_release "$ASDF_INSTALL_VERSION" "$release_file"
-
-	if [[ -f "$release_file" ]]; then
-		chmod +x "$release_file"
+	if download_release "$ASDF_INSTALL_VERSION" "$release_file"; then
+		echo "Binary download and verification completed successfully"
+	else
+		echo "Binary download or verification failed, installation will build from source"
+		# Remove any partial/failed download
+		rm -f "$release_file"
 	fi
 fi
