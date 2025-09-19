@@ -38,7 +38,9 @@
 #0.50829 4e6d4921
 
 # cool addition: > and < supported in joins. https://github.com/brimdata/super/pull/6167
-0.50829 50a3507
+#0.50829 50a3507
 
-# found a weird bug somewhere after 50725 and in 50829, but fixed by 50918
+# a nasty performance bug on some commands was present from Aug 27 to Sep 10
+# best to avoid builds in that time period.
+# see PR 6156 (bug introduced) and PR 6221 (bug fixed).
 0.50918 c6ebc213
