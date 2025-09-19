@@ -40,5 +40,5 @@
 # cool addition: > and < supported in joins. https://github.com/brimdata/super/pull/6167
 0.50829 50a3507
 
-# found a weird bug somewhere after 50725 and in 50829, but fixed by 50917
-0.50917 c6ebc213
+# found a weird bug somewhere after 50725 and in 50829, but fixed by 50918
+0.50918 c6ebc213
