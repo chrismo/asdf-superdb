@@ -46,3 +46,29 @@
 0.50918 c6ebc213
 
 0.50930 3b76fa64
+
+##
+# type-checking: "This commit adds type checking to the semantic analyzer thus
+# bringing static typing to dynamic data. As far as we know, this has not been
+# done before in a general fashion in any SQL-like query language for dynamically
+# typed data (e.g., SQL++, Asterix, search languages, etc)."
+#
+# "Type checking for built-in functions and aggregate functions is not yet done
+# as we need support from the functions packages to provide type signatures. This
+# will be done in a subsequent PR."
+#
+# From browsing the tests in the code, this could be 'breaking' in the sense that
+# things that didn't error out before, but still weren't valid, now error out.
+#
+# For example: `values {x:{y:1,w:1},z:1} | drop x.y | drop x.y`. The second drop
+# call prior to this build would just silently do nothing, but now it errors out.
+# 0.51007 c7dcd263
+
+##
+# breaking changes:
+# https://github.com/brimdata/super/pull/6286
+# remove crop(), fill(), fit(), order(), and shape() in favor of cast()
+#
+# This may not be a stable build, as the type-checking change went in before
+# this. And there's more code to come in regard to type-checking.
+# 0.51007 3c7aa82c
