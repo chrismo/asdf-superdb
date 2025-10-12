@@ -72,3 +72,9 @@
 # This may not be a stable build, as the type-checking change went in before
 # this. And there's more code to come in regard to type-checking.
 # 0.51007 3c7aa82c
+
+##
+# add table references and "this" to SQL expressions
+#
+# https://github.com/brimdata/super/commit/7c4d960ac1ec84e16a835ede4d3b94559d9d6a54
+# 0.51010 7c4d960a
