@@ -78,3 +78,7 @@
 #
 # https://github.com/brimdata/super/commit/7c4d960ac1ec84e16a835ede4d3b94559d9d6a54
 # 0.51010 7c4d960a
+
+##
+# anti join fixed in sql context
+0.51016 bdb38bbc
