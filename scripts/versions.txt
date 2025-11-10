@@ -17,7 +17,7 @@
 #   - -z switch -> -s
 #   - yield -> values
 #   - sample -> shapes
-#   - one-based indexes
+#   - one-based indexes [reverted! 0.51110 - Nov 10 2025]
 #   - comments from // to -- and /* ... */
 #   - over -> unnest
 0.50725 e75dfdaf
