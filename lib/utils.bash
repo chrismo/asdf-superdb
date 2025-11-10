@@ -55,6 +55,7 @@ download_release() {
 	local arch
 	arch=$(uname -m | tr "[:upper:]" "[:lower:]")
 	case $arch in
+	x86_64 | amd64 | x86-64 | x64) arch="amd64" ;;
 	aarch64 | arm64) arch="arm64" ;;
 	esac
 
@@ -92,6 +93,7 @@ verify_binary() {
 		local system_arch
 		system_arch=$(uname -m | tr "[:upper:]" "[:lower:]")
 		case $system_arch in
+		x86_64 | amd64 | x86-64 | x64) system_arch="amd64" ;;
 		aarch64 | arm64) system_arch="arm64" ;;
 		esac
 
@@ -99,7 +101,7 @@ verify_binary() {
 		if [[ "$system_arch" == "arm64" && "$file_type" =~ (arm64|aarch64|arm64e) ]]; then
 			# Architecture matches, continue to execution test
 			:
-		elif [[ "$system_arch" == "x86_64" && "$file_type" =~ (x86-64|x86_64) ]]; then
+		elif [[ "$system_arch" == "amd64" && "$file_type" =~ (x86-64|x86_64) ]]; then
 			# Architecture matches, continue to execution test
 			:
 		elif [[ "$file_type" =~ "universal binary" ]]; then
