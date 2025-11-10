@@ -82,3 +82,10 @@
 ##
 # anti join fixed in sql context
 0.51016 bdb38bbc
+
+##
+# count is an op() - how does this affect the previous count ... func? breaking change?
+# 0.51110 https://github.com/brimdata/super/pull/6344
+#
+# breaking change! index is back to 0-based with new `pragma` keyword and `index_base=0` 1 (or ... any positive int? nope - 0 or 1 only - 			t.error(d.Name, errors.New("index_base must be 0 or 1")))
+# 0.51110 https://github.com/brimdata/super/pull/6348
