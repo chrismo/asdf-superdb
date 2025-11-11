@@ -84,6 +84,17 @@
 0.51016 bdb38bbc
 
 ##
+# breaking change:
+# https://github.com/brimdata/super/pull/6329
+#
+# ::-cast and cast-as to use only types not expressions
+# 0.51029 de78d99f
+
+##
+# end of the month build
+0.51031 524bb63a
+
+##
 # count is an op() - how does this affect the previous count ... func? breaking change?
 # 0.51110 https://github.com/brimdata/super/pull/6344
 #
