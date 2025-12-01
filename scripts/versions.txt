@@ -100,3 +100,11 @@
 #
 # breaking change! index is back to 0-based with new `pragma` keyword and `index_base=0` 1 (or ... any positive int? nope - 0 or 1 only - 			t.error(d.Name, errors.New("index_base must be 0 or 1")))
 # 0.51110 https://github.com/brimdata/super/pull/6348
+
+##
+# end of the month build
+0.51128 a3f7d155
+
+##
+# breaking change - `from` and `FROM` are not interchangeable in pipe or SQL contexts.
+# 0.51201 a814e1b6 # I'm adding this same-day, might be more commits that come in on this date.
