@@ -110,4 +110,8 @@
 
 ##
 # breaking change - `from` and `FROM` are not interchangeable in pipe or SQL contexts.
-# 0.51201 a814e1b6 # I'm adding this same-day, might be more commits that come in on this date.
+# 0.51201 4164026d https://github.com/brimdata/super/pull/6405
+
+##
+# breaking change, but one I'm a fan of: coalesce ignores ALL errors, not just missing and quiet.
+# 0.51202 79545c1a https://github.com/brimdata/super/pull/6411
