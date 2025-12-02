@@ -100,6 +100,9 @@
 #
 # breaking change! index is back to 0-based with new `pragma` keyword and `index_base=0` 1 (or ... any positive int? nope - 0 or 1 only - 			t.error(d.Name, errors.New("index_base must be 0 or 1")))
 # 0.51110 https://github.com/brimdata/super/pull/6348
+#
+# breaking change! drop support for streaming aggregations
+# 0.51112 b2f29518 https://github.com/brimdata/super/pull/6355
 
 ##
 # end of the month build
