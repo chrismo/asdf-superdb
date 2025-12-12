@@ -115,3 +115,8 @@
 ##
 # breaking change, but one I'm a fan of: coalesce ignores ALL errors, not just missing and quiet.
 # 0.51202 79545c1a https://github.com/brimdata/super/pull/6411
+
+## 
+# breaking-ish change, dependen on inputs
+# enable type checking for all input files - use `-dynamic` flag to disable
+# 0.51211 b2b88890 https://github.com/brimdata/super/pull/6434
