@@ -1,0 +1,44 @@
+# For faster workflow runs, consider caching asdf and plugins:
+# https://github.com/asdf-vm/actions#caching
+name: 'Setup SuperDB'
+description: 'Install SuperDB (super binary) via asdf'
+author: 'chrismo'
+
+branding:
+  icon: 'database'
+  color: 'blue'
+
+inputs:
+  version:
+    description: 'SuperDB version to install (e.g., 0.51016). Defaults to latest.'
+    required: false
+    default: 'latest'
+  set_global:
+    description: 'Set as global asdf version (writes to ~/.tool-versions). Defaults to true.'
+    required: false
+    default: 'true'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install asdf
+      uses: asdf-vm/actions/setup@v4
+
+    - name: Add superdb plugin
+      shell: bash
+      run: asdf plugin add superdb https://github.com/chrismo/asdf-superdb.git || true
+
+    - name: Install superdb
+      shell: bash
+      run: |
+        if [ "${{ inputs.version }}" = "latest" ]; then
+          asdf install superdb latest
+          [ "${{ inputs.set_global }}" = "true" ] && asdf global superdb latest
+        else
+          asdf install superdb "${{ inputs.version }}"
+          [ "${{ inputs.set_global }}" = "true" ] && asdf global superdb "${{ inputs.version }}"
+        fi
+
+    - name: Verify installation
+      shell: bash
+      run: super --version
