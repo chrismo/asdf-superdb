@@ -33,10 +33,10 @@ runs:
       run: |
         if [ "${{ inputs.version }}" = "latest" ]; then
           asdf install superdb latest
-          [ "${{ inputs.set_global }}" = "true" ] && asdf global superdb latest
+          [ "${{ inputs.set_global }}" = "true" ] && asdf set superdb latest
         else
           asdf install superdb "${{ inputs.version }}"
-          [ "${{ inputs.set_global }}" = "true" ] && asdf global superdb "${{ inputs.version }}"
+          [ "${{ inputs.set_global }}" = "true" ] && asdf set superdb "${{ inputs.version }}"
         fi
 
     - name: Verify installation
