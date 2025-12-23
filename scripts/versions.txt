@@ -129,3 +129,5 @@
 ##
 # 0.51216
 # nullif added -> https://github.com/brimdata/super/pull/6448
+
+0.51222 a69e5cc6
