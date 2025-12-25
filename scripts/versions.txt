@@ -131,3 +131,7 @@
 # nullif added -> https://github.com/brimdata/super/pull/6448
 
 0.51222 a69e5cc6
+
+##
+# count() returns int64 now! 
+# 0.51224 9830034f https://github.com/brimdata/super/pull/6466
