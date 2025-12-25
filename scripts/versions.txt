@@ -133,5 +133,12 @@
 0.51222 a69e5cc6
 
 ##
+# count ... where is now count ... filter ()
+# was: `[ <field> := ] <agg-func> ( [ all | distinct ] <expr> ) [ where <pred> ]`
+# now: `[ <field> := ] <agg-func> ( [ all | distinct ] <expr> ) [ filter ( <pred> ) ]`
+# 0.51223 3c25564c https://github.com/brimdata/super/pull/6465
+
+##
 # count() returns int64 now! 
 # 0.51224 9830034f https://github.com/brimdata/super/pull/6466
+#                  https://github.com/brimdata/super/pull/6463
