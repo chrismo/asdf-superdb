@@ -142,3 +142,7 @@
 # count() returns int64 now! 
 # 0.51224 9830034f https://github.com/brimdata/super/pull/6466
 #                  https://github.com/brimdata/super/pull/6463
+
+##
+# Happy New Year
+0.51231 5ea0cb5d
