@@ -146,3 +146,7 @@
 ##
 # Happy New Year
 0.51231 5ea0cb5d
+
+##
+# Breaking change, + no longer concats strings. || still working and concat added.
+# 0.60105 b6e73785 https://github.com/brimdata/super/pull/6486
