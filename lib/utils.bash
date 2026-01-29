@@ -83,51 +83,51 @@ verify_binary() {
 	# Check if file exists and is not empty
 	[[ -s "$binary_path" ]] || return 1
 
-	# Use file command to verify it's actually an executable binary
-	local file_type
-	file_type=$(file "$binary_path" 2>/dev/null)
+	# Make binary executable first
+	chmod +x "$binary_path" 2>/dev/null || {
+		echo "Cannot make binary executable"
+		return 1
+	}
 
-	# Check for executable binary indicators
-	if [[ "$file_type" =~ (executable|ELF|Mach-O) ]]; then
-		# Verify architecture matches system
-		local system_arch
-		system_arch=$(uname -m | tr "[:upper:]" "[:lower:]")
-		case $system_arch in
-		x86_64 | amd64 | x86-64 | x64) system_arch="amd64" ;;
-		aarch64 | arm64) system_arch="arm64" ;;
-		esac
+	# If file command is available, do format and architecture checks
+	if command -v file >/dev/null 2>&1; then
+		local file_type
+		file_type=$(file "$binary_path" 2>/dev/null)
 
-		# Check if binary architecture matches system
-		if [[ "$system_arch" == "arm64" && "$file_type" =~ (arm64|aarch64|arm64e) ]]; then
-			# Architecture matches, continue to execution test
-			:
-		elif [[ "$system_arch" == "amd64" && "$file_type" =~ (x86-64|x86_64) ]]; then
-			# Architecture matches, continue to execution test
-			:
-		elif [[ "$file_type" =~ "universal binary" ]]; then
-			# Universal binaries contain multiple architectures, continue to execution test
-			:
+		# Check for executable binary indicators
+		if [[ "$file_type" =~ (executable|ELF|Mach-O) ]]; then
+			# Verify architecture matches system
+			local system_arch
+			system_arch=$(uname -m | tr "[:upper:]" "[:lower:]")
+			case $system_arch in
+			x86_64 | amd64 | x86-64 | x64) system_arch="amd64" ;;
+			aarch64 | arm64) system_arch="arm64" ;;
+			esac
+
+			# Check if binary architecture matches system
+			if [[ "$system_arch" == "arm64" && "$file_type" =~ (arm64|aarch64|arm64e) ]]; then
+				:
+			elif [[ "$system_arch" == "amd64" && "$file_type" =~ (x86-64|x86_64) ]]; then
+				:
+			elif [[ "$file_type" =~ "universal binary" ]]; then
+				:
+			else
+				echo "Architecture mismatch: binary is for different architecture than system ($system_arch)"
+				return 1
+			fi
 		else
-			echo "Architecture mismatch: binary is for different architecture than system ($system_arch)"
+			echo "Downloaded file is not a valid binary executable"
 			return 1
 		fi
+	fi
 
-		# Test if the binary can execute successfully
-		chmod +x "$binary_path" 2>/dev/null || {
-			echo "Cannot make binary executable"
-			return 1
-		}
-
-		# Try to run super --version to verify it works
-		if "$binary_path" --version >/dev/null 2>&1; then
-			echo "Binary verification successful (file format, architecture, and execution test passed)"
-			return 0
-		else
-			echo "Binary execution test failed (binary may be corrupted or incompatible)"
-			return 1
-		fi
+	# Final verification: try to run super --version
+	# This is the authoritative test - if it runs, it works
+	if "$binary_path" --version >/dev/null 2>&1; then
+		echo "Binary verification successful (execution test passed)"
+		return 0
 	else
-		echo "Downloaded file is not a valid binary executable"
+		echo "Binary execution test failed (binary may be corrupted or incompatible)"
 		return 1
 	fi
 }
