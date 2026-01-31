@@ -16,28 +16,12 @@
 
 # About
 
-[SuperDB](https://superdb.org/) is currently in pre-release and has no official
-tags or versioned releases. Since it is introducing breaking changes from its
-predecessor [zq](https://zed.brimdata.io/docs/commands/zq) as development
-proceeds, early adopters may want to manage installed versions, and this plugin
-allows that to happen.
+This plugin downloads prebuilt binaries from
+[official SuperDB releases](https://github.com/brimdata/super/releases). If a
+prebuilt binary is not available for your platform, the plugin will fall back
+to building from source using `go install`.
 
-Pseudo-versions are defined in this plugin by assigning a timestamped version to
-the latest sha on the listed date. The timestamp is: `(last digit of the
-year)(mm)(dd)`.
-
-```text
-  Version  Sha
-  -------  ---
-  0.50529  c8cc05e6
-  0.50630  f86de86d
-```
-
-The full list is here: [versions.txt](scripts/versions.txt) and will be updated
-roughly once a month. If there's a specific version you'd like included, please
-submit a PR.
-
-`asdf` always allows you to install by ref as well:
+`asdf` also allows you to install by ref:
 
 ```shell
 asdf install superdb ref:aabbccdd00
@@ -45,22 +29,18 @@ asdf install superdb ref:aabbccdd00
 asdf install superdb ref:(branch|tag|sha)
 ```
 
-`super` binaries are built using `go install` direct from the
-[repository](https://github.com/brimdata/super). This plugin expects the
-resulting binary to be in `$GOBIN` or `$GOPATH/bin` which should be established
-if you're using a recent version of Go. If you run into problems let us know.
+When building from source, the plugin expects the resulting binary to be in
+`$GOBIN` or `$GOPATH/bin` which should be established if you're using a recent
+version of Go. If you run into problems let us know.
 
 # Dependencies
 
 - `bash`, `curl`, `tar`, and [POSIX utilities](https://pubs.opengroup.org/onlinepubs/9699919799/idx/utilities.html).
-- `go` (for building from source). See [Go asdf plugin](https://github.com/asdf-community/asdf-golang?tab=readme-ov-file#install).
+- `go` (only needed if building from source). See [Go asdf plugin](https://github.com/asdf-community/asdf-golang?tab=readme-ov-file#install).
 
 # Install
 
 Plugin:
-
-This plugin is new and not stable, so it is not registered with
-https://github.com/asdf-vm/asdf-plugins yet.
 
 ```shell
 asdf plugin add superdb https://github.com/chrismo/asdf-superdb.git
