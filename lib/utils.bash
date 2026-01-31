@@ -2,9 +2,7 @@
 
 set -euo pipefail
 
-# TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for superdb.
 GH_REPO="https://github.com/brimdata/super"
-RELEASE_GH_REPO="https://github.com/chrismo/superdb-builds"
 TOOL_NAME="superdb"
 TOOL_TEST="super --version"
 
@@ -15,7 +13,7 @@ fail() {
 
 curl_opts=(-fsSL)
 
-# NOTE: You might want to remove this if superdb is not hosted on GitHub releases.
+# Add GitHub API token if available for higher rate limits
 if [ -n "${GITHUB_API_TOKEN:-}" ]; then
 	curl_opts=("${curl_opts[@]}" -H "Authorization: token $GITHUB_API_TOKEN")
 fi
@@ -25,24 +23,12 @@ sort_versions() {
 		LC_ALL=C sort -t. -k 1,1 -k 2,2n -k 3,3n -k 4,4n -k 5,5n | awk '{print $2}'
 }
 
-list_github_tags() {
-	git ls-remote --tags --refs "$GH_REPO" |
-		grep -o 'refs/tags/.*' | cut -d/ -f3- |
-		sed 's/^v//' # NOTE: You might want to adapt this sed to remove non-version strings from tags
-}
-
 list_all_versions() {
-	# Read versions from versions.txt file (first column only)
-	# shellcheck disable=SC2154
-	grep -v '#' "${plugin_dir}/scripts/versions.txt" |
-		egrep '.' |
-		awk '{print $1}'
-}
-
-lookup_version_sha() {
-	local version="$1"
-	# shellcheck disable=SC2154
-	awk -v ver="$version" '$1 == ver {print $2}' "${plugin_dir}/scripts/versions.txt"
+	# Fetch releases from GitHub API
+	local releases_url="https://api.github.com/repos/brimdata/super/releases"
+	curl "${curl_opts[@]}" "$releases_url" |
+		grep -oE '"tag_name": *"[^"]+"' |
+		sed 's/"tag_name": *"v\{0,1\}\([^"]*\)"/\1/'
 }
 
 download_release() {
@@ -59,13 +45,31 @@ download_release() {
 	aarch64 | arm64) arch="arm64" ;;
 	esac
 
-	url="$RELEASE_GH_REPO/releases/download/${version}/super-${version}-${os}-${arch}"
+	# Official releases are tar.gz archives
+	local archive_name="super-v${version}.${os}-${arch}.tar.gz"
+	url="$GH_REPO/releases/download/v${version}/${archive_name}"
+
+	local download_dir
+	download_dir=$(dirname "$filename")
+	local archive_path="${download_dir}/${archive_name}"
 
 	echo "* Downloading $TOOL_NAME release $version..."
-	if ! curl "${curl_opts[@]}" -o "$filename" -C - "$url"; then
+	if ! curl "${curl_opts[@]}" -o "$archive_path" -C - "$url"; then
 		echo "Failed to download $TOOL_NAME $version from $url"
 		return 1 # download failed
 	fi
+
+	# Extract the binary from the archive
+	echo "* Extracting $TOOL_NAME binary..."
+	if ! tar -xzf "$archive_path" -C "$download_dir" super; then
+		echo "Failed to extract $TOOL_NAME binary from archive"
+		rm -f "$archive_path"
+		return 1
+	fi
+
+	# Move extracted binary to expected location
+	mv "${download_dir}/super" "$filename"
+	rm -f "$archive_path"
 
 	# Verify the downloaded binary
 	if ! verify_binary "$filename"; then
@@ -178,10 +182,8 @@ build_from_sources() {
 
 	local install_ref
 	if [ "$install_type" == "version" ]; then
-		install_ref=$(lookup_version_sha "$version")
-		if [ -z "$install_ref" ]; then
-			fail "Version $version not found"
-		fi
+		# Use version tag for official releases
+		install_ref="v${version}"
 	elif [ "$install_type" == "ref" ]; then
 		install_ref="$version"
 	fi
