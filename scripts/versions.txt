@@ -150,3 +150,12 @@
 ##
 # Breaking change, + no longer concats strings. || still working and concat added.
 # 0.60105 b6e73785 https://github.com/brimdata/super/pull/6486
+
+## 
+# Enhancement
+# https://github.com/brimdata/super/pull/6496/changes - pragma pg defaults to `true`
+# https://github.com/brimdata/super/pull/6495/changes - adds pg pragma
+# * `pg` - controls the precedence of scoping for GROUP BY clauses in SQL operators
+#    * `false` to follow Google SQL semantics of resolving identifiers first from column aliases then from the input table
+#    * `true` to follow PostgreSQL semantics of resolving identifiers first from the input table then from the column aliases
+# 0.60107
