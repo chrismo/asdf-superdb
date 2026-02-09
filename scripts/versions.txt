@@ -116,7 +116,7 @@
 # breaking change, but one I'm a fan of: coalesce ignores ALL errors, not just missing and quiet.
 # 0.51202 79545c1a https://github.com/brimdata/super/pull/6411
 
-## 
+##
 # breaking-ish change, dependen on inputs
 # enable type checking for all input files - use `-dynamic` flag to disable
 # 0.51211 b2b88890 https://github.com/brimdata/super/pull/6434
@@ -139,7 +139,7 @@
 # 0.51223 3c25564c https://github.com/brimdata/super/pull/6465
 
 ##
-# count() returns int64 now! 
+# count() returns int64 now!
 # 0.51224 9830034f https://github.com/brimdata/super/pull/6466
 #                  https://github.com/brimdata/super/pull/6463
 
@@ -151,7 +151,7 @@
 # Breaking change, + no longer concats strings. || still working and concat added.
 # 0.60105 b6e73785 https://github.com/brimdata/super/pull/6486
 
-## 
+##
 # Enhancement
 # https://github.com/brimdata/super/pull/6496/changes - pragma pg defaults to `true`
 # https://github.com/brimdata/super/pull/6495/changes - adds pg pragma
