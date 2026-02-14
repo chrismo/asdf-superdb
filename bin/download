@@ -12,6 +12,12 @@ source "${plugin_dir}/lib/utils.bash"
 
 # ref type is build-only
 if [ "$ASDF_INSTALL_TYPE" == "version" ]; then
+	# Pre-release versions don't have GitHub release assets, build from source instead
+	if [ -n "$(lookup_version_sha "$ASDF_INSTALL_VERSION")" ]; then
+		echo "Pre-release version $ASDF_INSTALL_VERSION will be built from source"
+		exit 0
+	fi
+
 	mkdir -p "$ASDF_DOWNLOAD_PATH"
 
 	# file is a standalone binary, not an archive

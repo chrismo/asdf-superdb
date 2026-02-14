@@ -23,8 +23,17 @@ sort_versions() {
 		LC_ALL=C sort -t. -k 1,1 -k 2,2n -k 3,3n -k 4,4n -k 5,5n | awk '{print $2}'
 }
 
+lookup_version_sha() {
+	local version="$1"
+	awk -v ver="$version" '$1 == ver {print $2}' "${plugin_dir}/scripts/versions.txt"
+}
+
 list_all_versions() {
-	# Fetch releases from GitHub API
+	# Pre-release versions from versions.txt
+	grep -v '#' "${plugin_dir}/scripts/versions.txt" |
+		grep -E '.' |
+		awk '{print $1}'
+	# Official releases from GitHub API
 	local releases_url="https://api.github.com/repos/brimdata/super/releases"
 	curl "${curl_opts[@]}" "$releases_url" |
 		grep -oE '"tag_name": *"[^"]+"' |
@@ -182,8 +191,11 @@ build_from_sources() {
 
 	local install_ref
 	if [ "$install_type" == "version" ]; then
-		# Use version tag for official releases
-		install_ref="v${version}"
+		install_ref=$(lookup_version_sha "$version")
+		if [ -z "$install_ref" ]; then
+			# Not a pre-release version, use version tag for official releases
+			install_ref="v${version}"
+		fi
 	elif [ "$install_type" == "ref" ]; then
 		install_ref="$version"
 	fi
