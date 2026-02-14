@@ -1,16 +1,5 @@
 # dump only meaningful lines: grep -v '#' versions.txt | egrep '.'
 
-0.41031 f3b7a3a7
-0.41127 8901aa27
-0.41228 06f8f669
-0.50131 b3ed4d50
-0.50227 6300fbaf
-0.50327 733dc02
-0.50331 d9c43bbb
-0.50429 7bf0cb2e
-0.50529 c8cc05e6
-0.50630 f86de86d
-
 # many breaking changes (over the past months):
 #   - -f text => -f line
 #   - parse_zson -> parse_sup
