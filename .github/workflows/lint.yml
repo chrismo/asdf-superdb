@@ -16,6 +16,8 @@ jobs:
         env:
           GITHUB_API_TOKEN: ${{ github.token }}
         run: |
+          asdf plugin add shellcheck
+          asdf plugin add shfmt
           asdf plugin add superdb "$GITHUB_WORKSPACE"
           asdf install
       - run: scripts/lint.bash
