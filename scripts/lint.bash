@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 
 shellcheck --shell=bash --external-sources \
-	bin/* --source-path=template/lib/ \
+	--source-path=lib/ \
+	bin/* \
 	lib/* \
-	scripts/*
+	scripts/*.bash
 
 shfmt --language-dialect bash --diff \
-	./**/*
+	bin/* \
+	lib/* \
+	scripts/*.bash
