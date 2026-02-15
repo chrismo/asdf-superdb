@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# plugin_dir is set by the calling script before sourcing this file
+# shellcheck disable=SC2154
+
 set -euo pipefail
 
 GH_REPO="https://github.com/brimdata/super"
@@ -84,7 +87,7 @@ download_release() {
 	if ! verify_binary "$filename"; then
 		echo "Downloaded binary verification failed, will build from source"
 		rm -f "$filename" # Remove invalid binary
-		return 1 # verification failed
+		return 1          # verification failed
 	fi
 
 	echo "Binary downloaded and verified successfully"
