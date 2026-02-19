@@ -12,23 +12,26 @@ source "${plugin_dir}/lib/utils.bash"
 
 # ref type is build-only
 if [ "$ASDF_INSTALL_TYPE" == "version" ]; then
-	# Pre-release versions don't have GitHub release assets, build from source instead
-	if [ -n "$(lookup_version_sha "$ASDF_INSTALL_VERSION")" ]; then
-		echo "Pre-release version $ASDF_INSTALL_VERSION will be built from source"
-		exit 0
-	fi
-
 	mkdir -p "$ASDF_DOWNLOAD_PATH"
 
 	# file is a standalone binary, not an archive
 	release_file="$ASDF_DOWNLOAD_PATH/$TOOL_NAME-$ASDF_INSTALL_VERSION"
 
-	# Download the binary to the download directory, if one exists
-	if download_release "$ASDF_INSTALL_VERSION" "$release_file"; then
-		echo "Binary download and verification completed successfully"
+	# Pre-release versions are downloaded from chrismo/superdb-builds
+	if [ -n "$(lookup_version_sha "$ASDF_INSTALL_VERSION")" ]; then
+		if download_prerelease "$ASDF_INSTALL_VERSION" "$release_file"; then
+			echo "Binary download and verification completed successfully"
+		else
+			echo "Pre-release binary download failed, installation will build from source"
+			rm -f "$release_file"
+		fi
 	else
-		echo "Binary download or verification failed, installation will build from source"
-		# Remove any partial/failed download
-		rm -f "$release_file"
+		# Official releases are downloaded from brimdata/super
+		if download_release "$ASDF_INSTALL_VERSION" "$release_file"; then
+			echo "Binary download and verification completed successfully"
+		else
+			echo "Binary download or verification failed, installation will build from source"
+			rm -f "$release_file"
+		fi
 	fi
 fi
