@@ -6,6 +6,7 @@
 set -euo pipefail
 
 GH_REPO="https://github.com/brimdata/super"
+RELEASE_GH_REPO="https://github.com/chrismo/superdb-builds"
 TOOL_NAME="superdb"
 TOOL_TEST="super --version"
 
@@ -41,6 +42,38 @@ list_all_versions() {
 	curl "${curl_opts[@]}" "$releases_url" |
 		grep -oE '"tag_name": *"[^"]+"' |
 		sed 's/"tag_name": *"v\{0,1\}\([^"]*\)"/\1/'
+}
+
+download_prerelease() {
+	local version filename url
+	version="$1"
+	filename="$2"
+
+	local -r os=$(uname | tr "[:upper:]" "[:lower:]")
+
+	local arch
+	arch=$(uname -m | tr "[:upper:]" "[:lower:]")
+	case $arch in
+	x86_64 | amd64 | x86-64 | x64) arch="amd64" ;;
+	aarch64 | arm64) arch="arm64" ;;
+	esac
+
+	url="$RELEASE_GH_REPO/releases/download/${version}/super-${version}-${os}-${arch}"
+
+	echo "* Downloading $TOOL_NAME pre-release $version..."
+	if ! curl "${curl_opts[@]}" -o "$filename" -C - "$url"; then
+		echo "Failed to download $TOOL_NAME $version from $url"
+		return 1
+	fi
+
+	# Verify the downloaded binary
+	if ! verify_binary "$filename"; then
+		echo "Downloaded binary verification failed, will build from source"
+		rm -f "$filename"
+		return 1
+	fi
+
+	echo "Binary downloaded and verified successfully"
 }
 
 download_release() {
