@@ -17,7 +17,7 @@
 # About
 
 This plugin downloads prebuilt binaries from
-[official SuperDB releases](https://github.com/brimdata/super/releases). If a
+[SuperDB releases](https://github.com/chrismo/superdb-builds/releases). If a
 prebuilt binary is not available for your platform, the plugin will fall back
 to building from source using `go install`.
 

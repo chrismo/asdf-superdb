@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-REPO_URL="https://github.com/brimdata/super.git"
+REPO_URL="https://github.com/chrismo/super.git"
 REPO_NAME="super"
 OUTPUT_FILE="versions.txt"
 TEMP_DIR=$(mktemp -d)
@@ -14,7 +14,7 @@ cleanup() {
 
 trap cleanup EXIT
 
-echo "Cloning brimdata/super repository..."
+echo "Cloning chrismo/super repository..."
 cd "$TEMP_DIR"
 git clone --quiet "$REPO_URL" "$REPO_NAME"
 cd "$REPO_NAME"

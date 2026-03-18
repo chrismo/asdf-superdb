@@ -5,8 +5,7 @@
 
 set -euo pipefail
 
-GH_REPO="https://github.com/brimdata/super"
-RELEASE_GH_REPO="https://github.com/chrismo/superdb-builds"
+GH_REPO="https://github.com/chrismo/superdb-builds"
 TOOL_NAME="superdb"
 TOOL_TEST="super --version"
 
@@ -38,7 +37,7 @@ list_all_versions() {
 		grep -E '.' |
 		awk '{print $1}'
 	# Official releases from GitHub API
-	local releases_url="https://api.github.com/repos/brimdata/super/releases"
+	local releases_url="https://api.github.com/repos/chrismo/superdb-builds/releases"
 	curl "${curl_opts[@]}" "$releases_url" |
 		grep -oE '"tag_name": *"[^"]+"' |
 		sed 's/"tag_name": *"v\{0,1\}\([^"]*\)"/\1/'
@@ -58,7 +57,7 @@ download_prerelease() {
 	aarch64 | arm64) arch="arm64" ;;
 	esac
 
-	url="$RELEASE_GH_REPO/releases/download/${version}/super-${version}-${os}-${arch}"
+	url="$GH_REPO/releases/download/${version}/super-${version}-${os}-${arch}"
 
 	echo "* Downloading $TOOL_NAME pre-release $version..."
 	if ! curl "${curl_opts[@]}" -o "$filename" -C - "$url"; then
@@ -90,31 +89,15 @@ download_release() {
 	aarch64 | arm64) arch="arm64" ;;
 	esac
 
-	# Official releases are tar.gz archives
-	local archive_name="super-v${version}.${os}-${arch}.tar.gz"
-	url="$GH_REPO/releases/download/v${version}/${archive_name}"
-
-	local download_dir
-	download_dir=$(dirname "$filename")
-	local archive_path="${download_dir}/${archive_name}"
+	# Release binaries are plain executables
+	local binary_name="super-${version}-${os}-${arch}"
+	url="$GH_REPO/releases/download/v${version}/${binary_name}"
 
 	echo "* Downloading $TOOL_NAME release $version..."
-	if ! curl "${curl_opts[@]}" -o "$archive_path" -C - "$url"; then
+	if ! curl "${curl_opts[@]}" -o "$filename" -C - "$url"; then
 		echo "Failed to download $TOOL_NAME $version from $url"
 		return 1 # download failed
 	fi
-
-	# Extract the binary from the archive
-	echo "* Extracting $TOOL_NAME binary..."
-	if ! tar -xzf "$archive_path" -C "$download_dir" super; then
-		echo "Failed to extract $TOOL_NAME binary from archive"
-		rm -f "$archive_path"
-		return 1
-	fi
-
-	# Move extracted binary to expected location
-	mv "${download_dir}/super" "$filename"
-	rm -f "$archive_path"
 
 	# Verify the downloaded binary
 	if ! verify_binary "$filename"; then
@@ -237,9 +220,9 @@ build_from_sources() {
 	fi
 
 	(
-		echo "* Building $TOOL_NAME $version from github.com/brimdata/super ..."
+		echo "* Building $TOOL_NAME $version from github.com/chrismo/super ..."
 
-		if ! go install github.com/brimdata/super/cmd/super@"$install_ref"; then
+		if ! go install github.com/chrismo/super/cmd/super@"$install_ref"; then
 			fail "Failed to build $TOOL_NAME $version from source."
 		fi
 
