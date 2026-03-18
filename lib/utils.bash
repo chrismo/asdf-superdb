@@ -91,7 +91,7 @@ download_release() {
 
 	# Release binaries are plain executables
 	local binary_name="super-${version}-${os}-${arch}"
-	url="$GH_REPO/releases/download/v${version}/${binary_name}"
+	url="$GH_REPO/releases/download/${version}/${binary_name}"
 
 	echo "* Downloading $TOOL_NAME release $version..."
 	if ! curl "${curl_opts[@]}" -o "$filename" -C - "$url"; then
