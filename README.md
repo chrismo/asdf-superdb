@@ -16,10 +16,12 @@
 
 # About
 
-This plugin downloads prebuilt binaries from
-[SuperDB releases](https://github.com/chrismo/superdb-builds/releases). If a
-prebuilt binary is not available for your platform, the plugin will fall back
-to building from source using `go install`.
+This plugin installs prebuilt binaries of the SuperDB `super` binary. For
+versions 0.3.0 and later, binaries are downloaded from
+[official SuperDB releases](https://github.com/brimdata/super/releases). Older
+versions use [BSD-3-Clause licensed builds](https://github.com/chrismo/superdb-builds/releases).
+If a prebuilt binary is not available for your platform, the plugin will fall
+back to building from source using `go install`.
 
 `asdf` also allows you to install by ref:
 
