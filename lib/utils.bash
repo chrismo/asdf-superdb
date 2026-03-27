@@ -6,6 +6,7 @@
 set -euo pipefail
 
 GH_REPO="https://github.com/chrismo/superdb-builds"
+OFFICIAL_GH_REPO="https://github.com/brimdata/super"
 TOOL_NAME="superdb"
 TOOL_TEST="super --version"
 
@@ -36,11 +37,16 @@ list_all_versions() {
 	grep -v '#' "${plugin_dir}/scripts/versions.txt" |
 		grep -E '.' |
 		awk '{print $1}'
-	# Official releases from GitHub API
-	local releases_url="https://api.github.com/repos/chrismo/superdb-builds/releases"
-	curl "${curl_opts[@]}" "$releases_url" |
+	# Fork releases from chrismo/superdb-builds
+	local fork_url="https://api.github.com/repos/chrismo/superdb-builds/releases"
+	curl "${curl_opts[@]}" "$fork_url" 2>/dev/null |
 		grep -oE '"tag_name": *"[^"]+"' |
-		sed 's/"tag_name": *"v\{0,1\}\([^"]*\)"/\1/'
+		sed 's/"tag_name": *"v\{0,1\}\([^"]*\)"/\1/' || true
+	# Official releases from brimdata/super
+	local official_url="https://api.github.com/repos/brimdata/super/releases"
+	curl "${curl_opts[@]}" "$official_url" 2>/dev/null |
+		grep -oE '"tag_name": *"[^"]+"' |
+		sed 's/"tag_name": *"v\{0,1\}\([^"]*\)"/\1/' || true
 }
 
 download_prerelease() {
@@ -104,6 +110,64 @@ download_release() {
 		echo "Downloaded binary verification failed, will build from source"
 		rm -f "$filename" # Remove invalid binary
 		return 1          # verification failed
+	fi
+
+	echo "Binary downloaded and verified successfully"
+}
+
+download_official_release() {
+	local version filename
+	version="$1"
+	filename="$2"
+
+	local -r os=$(uname | tr "[:upper:]" "[:lower:]")
+
+	local arch
+	arch=$(uname -m | tr "[:upper:]" "[:lower:]")
+	case $arch in
+	x86_64 | amd64 | x86-64 | x64) arch="amd64" ;;
+	aarch64 | arm64) arch="arm64" ;;
+	esac
+
+	# Official releases are tar.gz archives: super-v{version}.{os}-{arch}.tar.gz
+	local archive_name="super-v${version}.${os}-${arch}.tar.gz"
+	local url="$OFFICIAL_GH_REPO/releases/download/v${version}/${archive_name}"
+
+	echo "* Downloading $TOOL_NAME official release $version..."
+	local tmpdir
+	tmpdir=$(mktemp -d)
+	local archive_file="$tmpdir/$archive_name"
+
+	if ! curl "${curl_opts[@]}" -o "$archive_file" -C - "$url"; then
+		echo "Failed to download $TOOL_NAME $version from $url"
+		rm -rf "$tmpdir"
+		return 1
+	fi
+
+	# Extract the binary from the tar.gz archive
+	if ! tar -xzf "$archive_file" -C "$tmpdir"; then
+		echo "Failed to extract archive"
+		rm -rf "$tmpdir"
+		return 1
+	fi
+
+	# Find the super binary in the extracted contents
+	local extracted_binary
+	extracted_binary=$(find "$tmpdir" -name "super" -type f ! -name "*.tar.gz" | head -1)
+	if [[ -z "$extracted_binary" ]]; then
+		echo "Could not find super binary in archive"
+		rm -rf "$tmpdir"
+		return 1
+	fi
+
+	mv "$extracted_binary" "$filename"
+	rm -rf "$tmpdir"
+
+	# Verify the downloaded binary
+	if ! verify_binary "$filename"; then
+		echo "Downloaded binary verification failed, will build from source"
+		rm -f "$filename"
+		return 1
 	fi
 
 	echo "Binary downloaded and verified successfully"
@@ -220,10 +284,14 @@ build_from_sources() {
 	fi
 
 	(
-		echo "* Building $TOOL_NAME $version from github.com/chrismo/super ..."
+		echo "* Building $TOOL_NAME $version from source..."
 
-		if ! go install github.com/chrismo/super/cmd/super@"$install_ref"; then
-			fail "Failed to build $TOOL_NAME $version from source."
+		# Try official repo first, fall back to fork
+		if ! go install "github.com/brimdata/super/cmd/super@$install_ref" 2>/dev/null; then
+			echo "* Trying fork repo..."
+			if ! go install "github.com/chrismo/super/cmd/super@$install_ref"; then
+				fail "Failed to build $TOOL_NAME $version from source."
+			fi
 		fi
 
 		mkdir -p "$install_path"

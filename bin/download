@@ -26,8 +26,10 @@ if [ "$ASDF_INSTALL_TYPE" == "version" ]; then
 			rm -f "$release_file"
 		fi
 	else
-		# Official releases are downloaded from chrismo/superdb-builds
-		if download_release "$ASDF_INSTALL_VERSION" "$release_file"; then
+		# Official releases — try brimdata/super first, fall back to superdb-builds
+		if download_official_release "$ASDF_INSTALL_VERSION" "$release_file"; then
+			echo "Binary download and verification completed successfully"
+		elif download_release "$ASDF_INSTALL_VERSION" "$release_file"; then
 			echo "Binary download and verification completed successfully"
 		else
 			echo "Binary download or verification failed, installation will build from source"
