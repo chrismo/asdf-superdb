@@ -77,4 +77,13 @@ Contributions of any kind are welcome! See the [contributing guide](contributing
 
 # License
 
-See [LICENSE](LICENSE) © [chrismo](https://github.com/chrismo/)
+This plugin is licensed under the [MIT License](LICENSE).
+
+This plugin does not distribute SuperDB source code or binaries. For versions
+0.3.0 and later, it downloads binaries from
+[official SuperDB releases](https://github.com/brimdata/super/releases), which
+are licensed under the
+[SuperDB Source Available License](https://github.com/brimdata/super/blob/main/LICENSE.md).
+Older versions are downloaded from
+[superdb-builds](https://github.com/chrismo/superdb-builds), which distributes
+binaries built from the last BSD-3-Clause licensed commit.
