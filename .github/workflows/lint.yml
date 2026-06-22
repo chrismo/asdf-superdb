@@ -10,7 +10,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: asdf-vm/actions/setup@v4
       - name: Install tool dependencies
         env:
@@ -25,7 +25,7 @@ jobs:
   actionlint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Check workflow files
         uses: docker://rhysd/actionlint:1.6.23
         with:
