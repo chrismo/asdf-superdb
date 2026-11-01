@@ -6,7 +6,7 @@
 set -euo pipefail
 
 GH_REPO="https://github.com/chrismo/superdb-builds"
-OFFICIAL_GH_REPO="https://github.com/brimdata/super"
+OFFICIAL_GH_REPO="https://github.com/superdb/super"
 TOOL_NAME="superdb"
 TOOL_TEST="super --version"
 
@@ -42,8 +42,8 @@ list_all_versions() {
 	curl "${curl_opts[@]}" "$fork_url" 2>/dev/null |
 		grep -oE '"tag_name": *"[^"]+"' |
 		sed 's/"tag_name": *"v\{0,1\}\([^"]*\)"/\1/' || true
-	# Official releases from brimdata/super
-	local official_url="https://api.github.com/repos/brimdata/super/releases"
+	# Official releases from superdb/super
+	local official_url="https://api.github.com/repos/superdb/super/releases"
 	curl "${curl_opts[@]}" "$official_url" 2>/dev/null |
 		grep -oE '"tag_name": *"[^"]+"' |
 		sed 's/"tag_name": *"v\{0,1\}\([^"]*\)"/\1/' || true
@@ -286,12 +286,11 @@ build_from_sources() {
 	(
 		echo "* Building $TOOL_NAME $version from source..."
 
-		# Try official repo first, fall back to fork
-		if ! go install "github.com/brimdata/super/cmd/super@$install_ref" 2>/dev/null; then
-			echo "* Trying fork repo..."
-			if ! go install "github.com/chrismo/super/cmd/super@$install_ref"; then
-				fail "Failed to build $TOOL_NAME $version from source."
-			fi
+		# Module path is github.com/brimdata/super before v0.4.0.
+		if ! go install "github.com/superdb/super/cmd/super@$install_ref" 2>/dev/null &&
+			! go install "github.com/brimdata/super/cmd/super@$install_ref" 2>/dev/null &&
+			! go install "github.com/chrismo/super/cmd/super@$install_ref"; then
+			fail "Failed to build $TOOL_NAME $version from source."
 		fi
 
 		mkdir -p "$install_path"

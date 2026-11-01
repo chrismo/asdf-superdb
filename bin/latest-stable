@@ -10,7 +10,6 @@ plugin_dir=$(dirname "$(dirname "$current_script_path")")
 # shellcheck source=../lib/utils.bash
 . "${plugin_dir}/lib/utils.bash"
 
-# Get the latest release version from official brimdata/super releases
 curl_opts=(-sI)
 
 if [ -n "${GITHUB_API_TOKEN:-}" ]; then

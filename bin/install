@@ -12,4 +12,4 @@ source "${plugin_dir}/lib/utils.bash"
 
 install_version "$ASDF_INSTALL_TYPE" "$ASDF_INSTALL_VERSION" "$ASDF_INSTALL_PATH"
 
-echo "Distributed under the terms of the SuperDB Source Available License v1.0 (https://github.com/brimdata/super/blob/main/LICENSE.md)"
+echo "Distributed under the terms of the SuperDB Source Available License v1.0 (https://github.com/superdb/super/blob/main/LICENSE.md)"
