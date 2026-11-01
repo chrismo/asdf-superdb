@@ -18,7 +18,7 @@
 
 This plugin installs prebuilt binaries of the SuperDB `super` binary. For
 versions 0.3.0 and later, binaries are downloaded from
-[official SuperDB releases](https://github.com/brimdata/super/releases). Older
+[official SuperDB releases](https://github.com/superdb/super/releases). Older
 versions use [BSD-3-Clause licensed builds](https://github.com/chrismo/superdb-builds/releases).
 If a prebuilt binary is not available for your platform, the plugin will fall
 back to building from source using `go install`.
@@ -81,9 +81,9 @@ This plugin is licensed under the [MIT License](LICENSE).
 
 This plugin does not distribute SuperDB source code or binaries. For versions
 0.3.0 and later, it downloads binaries from
-[official SuperDB releases](https://github.com/brimdata/super/releases), which
+[official SuperDB releases](https://github.com/superdb/super/releases), which
 are licensed under the
-[SuperDB Source Available License](https://github.com/brimdata/super/blob/main/LICENSE.md).
+[SuperDB Source Available License](https://github.com/superdb/super/blob/main/LICENSE.md).
 Older versions are downloaded from
 [superdb-builds](https://github.com/chrismo/superdb-builds), which distributes
 binaries built from the last BSD-3-Clause licensed commit.
