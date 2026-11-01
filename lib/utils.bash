@@ -37,11 +37,6 @@ list_all_versions() {
 	grep -v '#' "${plugin_dir}/scripts/versions.txt" |
 		grep -E '.' |
 		awk '{print $1}'
-	# Fork releases from chrismo/superdb-builds
-	local fork_url="https://api.github.com/repos/chrismo/superdb-builds/releases"
-	curl "${curl_opts[@]}" "$fork_url" 2>/dev/null |
-		grep -oE '"tag_name": *"[^"]+"' |
-		sed 's/"tag_name": *"v\{0,1\}\([^"]*\)"/\1/' || true
 	# Official releases from superdb/super
 	local official_url="https://api.github.com/repos/superdb/super/releases"
 	curl "${curl_opts[@]}" "$official_url" 2>/dev/null |
