@@ -287,9 +287,10 @@ build_from_sources() {
 		echo "* Building $TOOL_NAME $version from source..."
 
 		# Module path is github.com/brimdata/super before v0.4.0.
-		if ! go install "github.com/superdb/super/cmd/super@$install_ref" 2>/dev/null &&
-			! go install "github.com/brimdata/super/cmd/super@$install_ref" 2>/dev/null &&
-			! go install "github.com/chrismo/super/cmd/super@$install_ref"; then
+		local superdb_err
+		if ! superdb_err=$(go install "github.com/superdb/super/cmd/super@$install_ref" 2>&1) &&
+			! go install "github.com/brimdata/super/cmd/super@$install_ref"; then
+			echo "$superdb_err"
 			fail "Failed to build $TOOL_NAME $version from source."
 		fi
 
