@@ -32,6 +32,23 @@ lookup_version_sha() {
 	awk -v ver="$version" '$1 == ver {print $2}' "${plugin_dir}/scripts/versions.txt"
 }
 
+# Pre-release builds are versioned 0.YMMDD and all predate 0.1.0.
+PRERELEASE_RE='^0\.[0-9]{5}$'
+# 0.1.x and 0.2.x are unlisted but still install if pinned.
+UNLISTED_RELEASE_RE='^0\.[0-2]\.'
+
+print_license_notice() {
+	local install_type="$1" version="$2"
+	[ "$install_type" == "version" ] || return 0
+
+	# SuperDB moved from BSD-3-Clause to the Source Available License at 0.3.0.
+	if [[ "$version" =~ $PRERELEASE_RE || "$version" =~ $UNLISTED_RELEASE_RE ]]; then
+		echo "Distributed under the terms of the BSD-3-Clause License (https://github.com/superdb/super/blob/v0.2.0/LICENSE.txt)"
+	else
+		echo "Distributed under the terms of the SuperDB Source Available License v1.0 (https://github.com/superdb/super/blob/v${version}/LICENSE.md)"
+	fi
+}
+
 list_all_versions() {
 	# Pre-release versions from versions.txt
 	grep -v '#' "${plugin_dir}/scripts/versions.txt" |
@@ -41,7 +58,8 @@ list_all_versions() {
 	local official_url="https://api.github.com/repos/superdb/super/releases"
 	curl "${curl_opts[@]}" "$official_url" 2>/dev/null |
 		grep -oE '"tag_name": *"[^"]+"' |
-		sed 's/"tag_name": *"v\{0,1\}\([^"]*\)"/\1/' || true
+		sed 's/"tag_name": *"v\{0,1\}\([^"]*\)"/\1/' |
+		grep -vE "$UNLISTED_RELEASE_RE" || true
 }
 
 download_prerelease() {

@@ -16,10 +16,10 @@
 
 # About
 
-This plugin installs prebuilt binaries of the SuperDB `super` binary. For
-versions 0.3.0 and later, binaries are downloaded from
-[official SuperDB releases](https://github.com/superdb/super/releases). Older
-versions use [BSD-3-Clause licensed builds](https://github.com/chrismo/superdb-builds/releases).
+This plugin installs prebuilt binaries of the SuperDB `super` binary from
+[official SuperDB releases](https://github.com/superdb/super/releases).
+Pre-release versions (`0.YMMDD`) use
+[BSD-3-Clause licensed builds](https://github.com/chrismo/superdb-builds/releases).
 If a prebuilt binary is not available for your platform, the plugin will fall
 back to building from source using `go install`.
 
@@ -79,11 +79,10 @@ Contributions of any kind are welcome! See the [contributing guide](contributing
 
 This plugin is licensed under the [MIT License](LICENSE).
 
-This plugin does not distribute SuperDB source code or binaries. For versions
-0.3.0 and later, it downloads binaries from
-[official SuperDB releases](https://github.com/superdb/super/releases), which
-are licensed under the
+This plugin does not distribute SuperDB source code or binaries. It downloads
+binaries from [official SuperDB releases](https://github.com/superdb/super/releases).
+These are licensed under the
 [SuperDB Source Available License](https://github.com/superdb/super/blob/main/LICENSE.md).
-Older versions are downloaded from
+Pre-release versions are downloaded from
 [superdb-builds](https://github.com/chrismo/superdb-builds), which distributes
-binaries built from the last BSD-3-Clause licensed commit.
+binaries built from BSD-3-Clause licensed commits.

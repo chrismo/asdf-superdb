@@ -11,10 +11,7 @@ plugin_dir=$(dirname "$(dirname "$current_script_path")")
 source "${plugin_dir}/lib/utils.bash"
 
 versions=$(list_all_versions | sort_versions | uniq)
-
-# Pre-release builds are versioned 0.YMMDD and all predate 0.1.0.
-prerelease='^0\.[0-9]{5}$'
 {
-	grep -E "$prerelease" <<<"$versions" || true
-	grep -vE "$prerelease" <<<"$versions" || true
+	grep -E "$PRERELEASE_RE" <<<"$versions" || true
+	grep -vE "$PRERELEASE_RE" <<<"$versions" || true
 } | xargs echo
